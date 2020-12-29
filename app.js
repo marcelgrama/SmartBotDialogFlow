@@ -35,8 +35,8 @@ if (!config.FB_APP_SECRET) {
 if (!config.SERVER_URL) { //used for ink to static files
     throw new Error('missing SERVER_URL');
 }
-if (!config.SENDGRID_API_KEY) { //used for ink to static files
-    throw new Error('missing SENDGRID_API_KEY');
+if (!config.SENDGRIG_API_KEY) { //used for ink to static files
+    throw new Error('missing SENDGRIG_API_KEY');
 }
 if (!config.EMAIL_FROM) { //used for ink to static files
     throw new Error('missing EMAIL_FROM');
@@ -887,7 +887,7 @@ function verifyRequestSignature(req, res, buf) {
 function sendEmail(subject, content) {
     console.log('sending email...');
     const sgMail = require('@sendgrid/mail');
-    sgMail.setApiKey(config.SENDGRID_API_KEY);
+    sgMail.setApiKey(config.SENDGRIG_API_KEY);
     const msg = {
         to: config.EMAIL_TO,
         from: config.EMAIL_FROM,
