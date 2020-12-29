@@ -35,6 +35,15 @@ if (!config.FB_APP_SECRET) {
 if (!config.SERVER_URL) { //used for ink to static files
     throw new Error('missing SERVER_URL');
 }
+if (!config.SENDGRID_API_KEY) { //used for ink to static files
+    throw new Error('missing SENDGRID_API_KEY');
+}
+if (!config.EMAIL_FROM) { //used for ink to static files
+    throw new Error('missing EMAIL_FROM');
+}
+if (!config.EMAIL_TO) { //used for ink to static files
+    throw new Error('missing EMAIL_TO');
+}
 
 
 
@@ -184,7 +193,7 @@ function receivedMessage(event) {
 }
 
 
-function handleMessageAttachments(messageAttachments, senderID){
+function handleMessageAttachments(messageAttachments, senderID) {
     //for now just reply
     sendTextMessage(senderID, "Attachment received. Thank you.");
 }
@@ -204,6 +213,33 @@ function handleEcho(messageId, appId, metadata) {
 
 function handleDialogFlowAction(sender, action, messages, contexts, parameters) {
     switch (action) {
+        case "detailed-application":
+            let filteredContexts = contexts.filter(function (el) {
+                return el.name.includes('job_application') ||
+                    el.name.includes('job-application-details_dialog_context')
+            });
+            if (filteredContexts.length > 0 && contexts[0].parameters) {
+                let phone_number = (fbService.isDefined(contexts[0].parameters.fields['phone-number'])
+                    && contexts[0].parameters.fields['phone-number'] != '') ? contexts[0].parameters.fields['phone-number'].stringValue : '';
+                let user_name = (fbService.isDefined(contexts[0].parameters.fields['user-name'])
+                    && contexts[0].parameters.fields['user-name'] != '') ? contexts[0].parameters.fields['user-name'].stringValue : '';
+                let previous_job = (fbService.isDefined(contexts[0].parameters.fields['previous-job'])
+                    && contexts[0].parameters.fields['previous-job'] != '') ? contexts[0].parameters.fields['previous-job'].stringValue : '';
+                let years_of_experience = (fbService.isDefined(contexts[0].parameters.fields['years-of-experience'])
+                    && contexts[0].parameters.fields['years-of-experience'] != '') ? contexts[0].parameters.fields['years-of-experience'].stringValue : '';
+                let job_vacancy = (fbService.isDefined(contexts[0].parameters.fields['job-vacancy'])
+                    && contexts[0].parameters.fields['job-vacancy'] != '') ? contexts[0].parameters.fields['job-vacancy'].stringValue : '';
+            }
+            if (phone_number != '' && user_name != '' && previous_job != '' && years_of_experience != '' && job_vacancy != '') {
+                let emailContent = 'A new job enquiry from' + user_name + ' for the job: ' + job_vacancy +
+                    '.<br> Previous job position: ' + previous_job + '.' +
+                    '.<br> Years of experience: ' + years_of_experience + '.' +
+                    '.<br> Phone number: ' + phone_number + '.';
+                sendEmail('New job application', emailContent);
+                handleMessages(messages, sender);
+            } else {
+                handleMessages(messages, sender);
+            }
         default:
             //unhandled action, just send back the text
             handleMessages(messages, sender);
@@ -223,11 +259,11 @@ function handleMessage(message, sender) {
             let replies = [];
             message.quickReplies.quickReplies.forEach((text) => {
                 let reply =
-                    {
-                        "content_type": "text",
-                        "title": text,
-                        "payload": text
-                    }
+                {
+                    "content_type": "text",
+                    "title": text,
+                    "payload": text
+                }
                 replies.push(reply);
             });
             sendQuickReply(sender, message.quickReplies.title, replies);
@@ -267,7 +303,7 @@ function handleCardMessages(messages, sender) {
 
         let element = {
             "title": message.card.title,
-            "image_url":message.card.imageUri,
+            "image_url": message.card.imageUri,
             "subtitle": message.card.subtitle,
             "buttons": buttons
         };
@@ -279,25 +315,25 @@ function handleCardMessages(messages, sender) {
 
 function handleMessages(messages, sender) {
     let timeoutInterval = 1100;
-    let previousType ;
+    let previousType;
     let cardTypes = [];
     let timeout = 0;
     for (var i = 0; i < messages.length; i++) {
 
-        if ( previousType == "card" && (messages[i].message != "card" || i == messages.length - 1)) {
+        if (previousType == "card" && (messages[i].message != "card" || i == messages.length - 1)) {
             timeout = (i - 1) * timeoutInterval;
             setTimeout(handleCardMessages.bind(null, cardTypes, sender), timeout);
             cardTypes = [];
             timeout = i * timeoutInterval;
             setTimeout(handleMessage.bind(null, messages[i], sender), timeout);
-        } else if ( messages[i].message == "card" && i == messages.length - 1) {
+        } else if (messages[i].message == "card" && i == messages.length - 1) {
             cardTypes.push(messages[i]);
             timeout = (i - 1) * timeoutInterval;
             setTimeout(handleCardMessages.bind(null, cardTypes, sender), timeout);
             cardTypes = [];
-        } else if ( messages[i].message == "card") {
+        } else if (messages[i].message == "card") {
             cardTypes.push(messages[i]);
-        } else  {
+        } else {
 
             timeout = i * timeoutInterval;
             setTimeout(handleMessage.bind(null, messages[i], sender), timeout);
@@ -538,7 +574,7 @@ function sendGenericMessage(recipientId, elements) {
 
 
 function sendReceiptMessage(recipientId, recipient_name, currency, payment_method,
-                            timestamp, elements, address, summary, adjustments) {
+    timestamp, elements, address, summary, adjustments) {
     // Generate a random receipt ID as the API requires a unique ID
     var receiptId = "order" + Math.floor(Math.random() * 1000);
 
@@ -579,7 +615,7 @@ function sendQuickReply(recipientId, text, replies, metadata) {
         },
         message: {
             text: text,
-            metadata: isDefined(metadata)?metadata:'',
+            metadata: isDefined(metadata) ? metadata : '',
             quick_replies: replies
         }
     };
@@ -846,6 +882,25 @@ function verifyRequestSignature(req, res, buf) {
             throw new Error("Couldn't validate the request signature.");
         }
     }
+}
+
+function sendEmail(subject, content) {
+    console.log('sending email...');
+    const sgMail = require('@sendgrid/mail');
+    sgMail.setApiKey(config.SENDGRID_API_KEY);
+    const msg = {
+        to: config.EMAIL_TO,
+        from: config.EMAIL_FROM,
+        subject: subject,
+        text: content,
+        html: content,
+    }
+    sgMail.send(msg).then(() => {
+        console.log('Email sent!');
+    }).catch(error => {
+        console.log('Email NOT sent!');
+        console.error(error.toString());
+    })
 }
 
 function isDefined(obj) {
