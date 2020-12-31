@@ -884,7 +884,7 @@ function verifyRequestSignature(req, res, buf) {
     }
 }
 
-function sendEmail(subject, content) {
+function sendEmail(subject, content) { //Send API 400 Bad Request { 2020-12-29T22:31:29.932400+00:00 app[web.1]: message: '(#10) This action was not submitted due to new privacy rules in Europe. See developer documentation for more info.
     console.log('sending email...');
     const sgMail = require('@sendgrid/mail');
     sgMail.setApiKey(config.SENDGRIG_API_KEY);
