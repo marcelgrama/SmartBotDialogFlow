@@ -635,6 +635,8 @@ function sendReceiptMessage(recipientId, recipient_name, currency, payment_metho
  */
 function sendQuickReply(recipientId, text, replies, metadata) {
     console.log(replies, 'replies[][][]');
+    console.error("replies[][][]", replies);
+
     var messageData = {
         recipient: {
             id: recipientId
