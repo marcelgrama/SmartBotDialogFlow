@@ -805,8 +805,7 @@ function greetUserText(userId) {
 			console.log('getUserData: ' + user);
 			if (user.first_name) {
 
-        var pool = new pg.Pool({
-          connectionString: process.env.PG_CONFIG_DATABASE,
+        var pool = new pg.Pool(PG_CONFIG, {
           ssl: {
             rejectUnauthorized: false,
           },
