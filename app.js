@@ -805,11 +805,7 @@ function greetUserText(userId) {
 			console.log('getUserData: ' + user);
 			if (user.first_name) {
 
-        var pool = new pg.Pool(process.env.PG_CONFIG,{
-          ssl: {
-            rejectUnauthorized: false,
-          },
-        });
+        var pool = new pg.Pool(config.PG_CONFIG);
                 pool.connect(function(err, client, done) {
                     if (err) {
                         return console.error('Error acquiring client', err.stack);
