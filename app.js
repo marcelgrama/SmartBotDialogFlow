@@ -213,6 +213,10 @@ function handleEcho(messageId, appId, metadata) {
 
 function handleDialogFlowAction(sender, action, messages, contexts, parameters) {
     switch (action) {
+        case "faq-delvery": 
+            handleMessages(messages, sender);
+            // sendTypingOn(sender);
+
         case "detailed-application":
             let filteredContexts = contexts.filter(function (el) {
                 return el.name.includes('jobapplication') ||
@@ -368,7 +372,7 @@ function handleDialogFlowResponse(sender, response) {
 
 async function sendToDialogFlow(sender, textString, params) {
 
-    sendTypingOn(sender);
+    // sendTypingOn(sender);
 
     try {
         const sessionPath = sessionClient.sessionPath(
