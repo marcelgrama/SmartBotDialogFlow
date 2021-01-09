@@ -217,19 +217,13 @@ function handleDialogFlowAction(sender, action, messages, contexts, parameters) 
             handleMessages(messages, sender);
             // sendTypingOn(sender);
             setTimeout(()=>{
-                let buttons = [
-                    [
-                        {
-                           content_type:"text",
-                           title:"View Website",
-                           payload:"{{DEVELOPER_DEFINED_PAYLOAD}}"
-                        },
-                        // {
-                        //    "content_type":"text",
-                        //    "title":"Green",
-                        //    "payload":"{{DEVELOPER_DEFINED_PAYLOAD}}"
-                        // }
-                     ]
+                //trene schimbat sa trimimita qucik replies inloc de buttons ( Europe changes)
+                let quick_replies = [
+                    {
+                        content_type:"text",
+                        title:"View Website",
+                        payload:"{{DEVELOPER_DEFINED_PAYLOAD}}"
+                     },
                     // {
                     //     type: "phone_number",
                     //     title: "Call us",
@@ -241,7 +235,7 @@ function handleDialogFlowAction(sender, action, messages, contexts, parameters) 
                     //     payload: "CHAT"
                     // }
                 ]
-                sendButtonMessage(sender, "What would you like to do next?", buttons);
+                sendQuickReply(sender, "What would you like to do next?", quick_replies);
             }, 3000)
 
         case "detailed-application":
