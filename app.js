@@ -853,9 +853,9 @@ function receivedPostback(event) {
     case "GET_STARTED":
         greetUserText(senderID);
         break;
-    case "JOB_APPLY":
-      sendToDialogFlow(senderID, "job openings");
-      break;
+    // case "JOB_APPLY":
+    //   sendToDialogFlow(senderID, "job openings");
+    //   break;
     case "CHAT":
       sendTextMessage(
         senderID,
