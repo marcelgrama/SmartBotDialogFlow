@@ -811,11 +811,13 @@ function greetUserText(userId) {
                         return console.error('Error acquiring client', err.stack);
                     }
                     var rows = [];
+                    console.log('userID[][][]', userId)
                     client.query(`SELECT fb_id FROM users WHERE fb_id='${userId}' LIMIT 1`,
                         function(err, result) {
                             if (err) {
                                 console.log('Query error: ' + err);
                             } else {
+                              console.log('result[][][]', result, user.first_name, user.last_name, user.profile_pic)
 
                                 if (result.rows.length === 0) {
                                     let sql = 'INSERT INTO users (fb_id, first_name, last_name, profile_pic) ' +
