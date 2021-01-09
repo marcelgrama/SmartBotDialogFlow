@@ -213,57 +213,57 @@ function handleEcho(messageId, appId, metadata) {
 
 function handleDialogFlowAction(sender, action, messages, contexts, parameters) {
     switch (action) {
-        // case "faq-delvery": 
-        //     handleMessages(messages, sender);
-        //     // sendTypingOn(sender);
-        //     setTimeout(()=>{
-        //         let buttons = [
-        //             {
-        //                 type: "web_url",
-        //                 url: "https:// www.myapple.com/track_order",
-        //                 title: "Track my order",
-        //             },
-        //             {
-        //                 type: "phone_number",
-        //                 title: "Call us",
-        //                 payload: "+16505551234"
-        //             },
-        //             {
-        //                 type: "postback",
-        //                 title: "keep on chatting",
-        //                 payload: "CHAT"
-        //             }
-        //         ]
-        //         sendButtonMessage(sender, "What would you like to do next?", buttons);
-        //     }, 3000)
+        case "faq-delvery": 
+            handleMessages(messages, sender);
+            // sendTypingOn(sender);
+            setTimeout(()=>{
+                let buttons = [
+                    {
+                        type: "web_url",
+                        url: "https:// www.myapple.com/track_order",
+                        title: "Track my order",
+                    },
+                    {
+                        type: "phone_number",
+                        title: "Call us",
+                        payload: "+16505551234"
+                    },
+                    {
+                        type: "postback",
+                        title: "keep on chatting",
+                        payload: "CHAT"
+                    }
+                ]
+                sendButtonMessage(sender, "What would you like to do next?", buttons);
+            }, 3000)
 
-        // case "detailed-application":
-        //     let filteredContexts = contexts.filter(function (el) {
-        //         return el.name.includes('jobapplication') ||
-        //             el.name.includes('job-application-details_dialog_context')
-        //     });
-        //     if (filteredContexts.length > 0 && contexts[0].parameters) {
-        //         let phone_number = (fbService.isDefined(contexts[0].parameters.fields['phone-number'])
-        //             && contexts[0].parameters.fields['phone-number'] != '') ? contexts[0].parameters.fields['phone-number'].stringValue : '';
-        //         let user_name = (fbService.isDefined(contexts[0].parameters.fields['user-name'])
-        //             && contexts[0].parameters.fields['user-name'] != '') ? contexts[0].parameters.fields['user-name'].stringValue : '';
-        //         let previous_job = (fbService.isDefined(contexts[0].parameters.fields['previous-job'])
-        //             && contexts[0].parameters.fields['previous-job'] != '') ? contexts[0].parameters.fields['previous-job'].stringValue : '';
-        //         let years_of_experience = (fbService.isDefined(contexts[0].parameters.fields['years-of-experience'])
-        //             && contexts[0].parameters.fields['years-of-experience'] != '') ? contexts[0].parameters.fields['years-of-experience'].stringValue : '';
-        //         let job_vacancy = (fbService.isDefined(contexts[0].parameters.fields['job-vacancy'])
-        //             && contexts[0].parameters.fields['job-vacancy'] != '') ? contexts[0].parameters.fields['job-vacancy'].stringValue : '';
-        //     }
-        //     if (phone_number != '' && user_name != '' && previous_job != '' && years_of_experience != '' && job_vacancy != '') {
-        //         let emailContent = 'A new job enquiry from' + user_name + ' for the job: ' + job_vacancy +
-        //             '.<br> Previous job position: ' + previous_job + '.' +
-        //             '.<br> Years of experience: ' + years_of_experience + '.' +
-        //             '.<br> Phone number: ' + phone_number + '.';
-        //         sendEmail('New job application', emailContent);
-        //         handleMessages(messages, sender);
-        //     } else {
-        //         handleMessages(messages, sender);
-        //     }
+        case "detailed-application":
+            let filteredContexts = contexts.filter(function (el) {
+                return el.name.includes('jobapplication') ||
+                    el.name.includes('job-application-details_dialog_context')
+            });
+            if (filteredContexts.length > 0 && contexts[0].parameters) {
+                let phone_number = (fbService.isDefined(contexts[0].parameters.fields['phone-number'])
+                    && contexts[0].parameters.fields['phone-number'] != '') ? contexts[0].parameters.fields['phone-number'].stringValue : '';
+                let user_name = (fbService.isDefined(contexts[0].parameters.fields['user-name'])
+                    && contexts[0].parameters.fields['user-name'] != '') ? contexts[0].parameters.fields['user-name'].stringValue : '';
+                let previous_job = (fbService.isDefined(contexts[0].parameters.fields['previous-job'])
+                    && contexts[0].parameters.fields['previous-job'] != '') ? contexts[0].parameters.fields['previous-job'].stringValue : '';
+                let years_of_experience = (fbService.isDefined(contexts[0].parameters.fields['years-of-experience'])
+                    && contexts[0].parameters.fields['years-of-experience'] != '') ? contexts[0].parameters.fields['years-of-experience'].stringValue : '';
+                let job_vacancy = (fbService.isDefined(contexts[0].parameters.fields['job-vacancy'])
+                    && contexts[0].parameters.fields['job-vacancy'] != '') ? contexts[0].parameters.fields['job-vacancy'].stringValue : '';
+            }
+            if (phone_number != '' && user_name != '' && previous_job != '' && years_of_experience != '' && job_vacancy != '') {
+                let emailContent = 'A new job enquiry from' + user_name + ' for the job: ' + job_vacancy +
+                    '.<br> Previous job position: ' + previous_job + '.' +
+                    '.<br> Years of experience: ' + years_of_experience + '.' +
+                    '.<br> Phone number: ' + phone_number + '.';
+                sendEmail('New job application', emailContent);
+                handleMessages(messages, sender);
+            } else {
+                handleMessages(messages, sender);
+            }
         default:
             //unhandled action, just send back the text
             handleMessages(messages, sender);
