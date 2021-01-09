@@ -733,7 +733,36 @@ function sendTypingOff(recipientId) {
 
   callSendAPI(messageData);
 }
+function greetUserText(userId) {
+	//first read user firstname
+	request({
+		uri: 'https://graph.facebook.com/v3.2/' + userId,
+		qs: {
+			access_token: config.FB_PAGE_TOKEN
+		}
 
+	}, function (error, response, body) {
+		if (!error && response.statusCode == 200) {
+
+			var user = JSON.parse(body);
+			console.log('getUserData: ' + user);
+			if (user.first_name) {
+				console.log("FB user: %s %s, %s",
+					user.first_name, user.last_name, user.profile_pic);
+
+				sendTextMessage(userId, "Welcome " + user.first_name + '! ' +
+                    'I can answer frequently asked questions for you ' +
+                    'and I perform job interviews. What can I help you with?');
+			} else {
+				console.log("Cannot get data for fb user with id",
+					userId);
+			}
+		} else {
+			console.error(response.error);
+		}
+
+	});
+}
 /*
  * Send a message with the account linking call-to-action
  *
@@ -806,7 +835,34 @@ function callSendAPI(messageData) {
     }
   );
 }
+function greetUserText(userId) {
+    //first read user firstname
+    request({
+        uri: 'https://graph.facebook.com/v2.7/' + userId,
+        qs: {
+            access_token: config.FB_PAGE_TOKEN
+        }
 
+    }, function (error, response, body) {
+        if (!error && response.statusCode == 200) {
+
+            var user = JSON.parse(body);
+
+            if (user.first_name) {
+                console.log("FB user: %s %s, %s",
+                    user.first_name, user.last_name, user.gender);
+
+                sendTextMessage(userId, "Welcome " + user.first_name + '!');
+            } else {
+                console.log("Cannot get data for fb user with id",
+                    userId);
+            }
+        } else {
+            console.error(response.error);
+        }
+
+    });
+}
 /*
  * Postback Event
  *
@@ -956,36 +1012,6 @@ function receivedAuthentication(event) {
     timeOfAuth
   );
 
-  function greetUserText(userId) {
-	//first read user firstname
-	request({
-		uri: 'https://graph.facebook.com/v3.2/' + userId,
-		qs: {
-			access_token: config.FB_PAGE_TOKEN
-		}
-
-	}, function (error, response, body) {
-		if (!error && response.statusCode == 200) {
-
-			var user = JSON.parse(body);
-			console.log('getUserData: ' + user);
-			if (user.first_name) {
-				console.log("FB user: %s %s, %s",
-					user.first_name, user.last_name, user.profile_pic);
-
-				sendTextMessage(userId, "Welcome " + user.first_name + '! ' +
-                    'I can answer frequently asked questions for you ' +
-                    'and I perform job interviews. What can I help you with?');
-			} else {
-				console.log("Cannot get data for fb user with id",
-					userId);
-			}
-		} else {
-			console.error(response.error);
-		}
-
-	});
-}
 
   // When an authentication is received, we'll send a message back to the sender
   // to let them know it was successful.
