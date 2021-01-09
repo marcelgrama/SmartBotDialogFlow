@@ -12,14 +12,15 @@
   },
   "author": "",
   "license": "ISC",
-  "engines":{
-    "node": "8.7.0"
+  "engines": {
+    "node": "14.15.4"
   },
   "dependencies": {
     "@sendgrid/mail": "^7.4.0",
     "body-parser": "^1.18.3",
     "dialogflow": "^0.8.2",
     "express": "^4.16.4",
+    "pg": "8.5.1",
     "request": "^2.88.0",
     "uuid": "^3.3.2"
   }
