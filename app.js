@@ -796,14 +796,21 @@ function greetUserText(userId) {
 		uri: 'https://graph.facebook.com/v3.2/' + userId,
 		qs: {
 			access_token: config.FB_PAGE_TOKEN
-		}
+    }
+    
 	}, function (error, response, body) {
 		if (!error && response.statusCode == 200) {
+
 			var user = JSON.parse(body);
 			console.log('getUserData: ' + user);
 			if (user.first_name) {
 
-        var pool = new pg.Pool(config.PG_CONFIG);
+        var pool = new pg.Pool({
+          connectionString: process.env.PG_CONFIG_DATABASE,
+          ssl: {
+            rejectUnauthorized: false,
+          },
+        });
                 pool.connect(function(err, client, done) {
                     if (err) {
                         return console.error('Error acquiring client', err.stack);
