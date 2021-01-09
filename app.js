@@ -218,11 +218,18 @@ function handleDialogFlowAction(sender, action, messages, contexts, parameters) 
             // sendTypingOn(sender);
             setTimeout(()=>{
                 let buttons = [
-                    {
-                        type: "web_url",
-                        url: "https://www.myapple.com/track_order",
-                        title: "Track my order",
-                    },
+                    [
+                        {
+                           content_type:"text",
+                           title:"View Website",
+                           payload:"{{DEVELOPER_DEFINED_PAYLOAD}}"
+                        },
+                        // {
+                        //    "content_type":"text",
+                        //    "title":"Green",
+                        //    "payload":"{{DEVELOPER_DEFINED_PAYLOAD}}"
+                        // }
+                     ]
                     // {
                     //     type: "phone_number",
                     //     title: "Call us",
