@@ -220,10 +220,10 @@ function handleDialogFlowAction(sender, action, messages, contexts, parameters) 
                 //trene schimbat sa trimimita qucik replies inloc de buttons ( Europe changes)
                 let quick_replies = [
                     {
-                        content_type:"text",
-                        title:"View Website",
-                        payload:"{{DEVELOPER_DEFINED_PAYLOAD}}"
-                     },
+                        "content_type": "text",
+                        "title": "view website",
+                        "payload": "some payload"
+                    },
                     // {
                     //     type: "phone_number",
                     //     title: "Call us",
@@ -634,13 +634,15 @@ function sendReceiptMessage(recipientId, recipient_name, currency, payment_metho
  *
  */
 function sendQuickReply(recipientId, text, replies, metadata) {
+    console.log(replies, 'replies[][][]');
     var messageData = {
         recipient: {
             id: recipientId
         },
+        messaging_type:"response",
         message: {
             text: text,
-            metadata: isDefined(metadata) ? metadata : '',
+            // metadata: isDefined(metadata) ? metadata : '',
             quick_replies: replies
         }
     };
