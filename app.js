@@ -249,7 +249,7 @@ function handleDialogFlowAction(
 
       case "detailed-application":
         let filteredContexts = contexts.filter(function (el) {
-            return el.name.includes('job_application') ||
+            return el.name.includes('jobapplication') ||
                 el.name.includes('job-application-details_dialog_context')
         });
         if (filteredContexts.length > 0 && contexts[0].parameters) {
