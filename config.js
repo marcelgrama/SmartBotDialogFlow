@@ -7,7 +7,7 @@ module.exports = {
     DF_LANGUAGE_CODE: process.env.DF_LANGUAGE_CODE,
     GOOGLE_CLIENT_EMAIL: process.env.GOOGLE_CLIENT_EMAIL,
     GOOGLE_PRIVATE_KEY: JSON.parse(process.env.GOOGLE_PRIVATE_KEY),
-    SENDGRIG_API_KEY: process.env.SENDGRIG_API_KEY,
+    SENDGRID_API_KEY: process.env.SENDGRIG_API_KEY,
     EMAIL_FROM: process.env.EMAIL_FROM,
     EMAIL_TO: process.env.EMAIL_TO,
 };
