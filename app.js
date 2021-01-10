@@ -10,6 +10,7 @@ const app = express();
 const uuid = require('uuid');
 const pg = require('pg');
 const userService = require('./user');
+const colors = require('./colors');
 
 pg.defaults.ssl = true;
 // Messenger API parameters
@@ -254,6 +255,31 @@ function handleDialogFlowAction(sender, action, messages, contexts, parameters) 
         //     	handleMessages(messages, sender);
         //     }
         // 	break;
+        case "buy.iphone":
+            colors.readUserColor(function(color) {
+                    let reply;
+                    if (color === '') {
+                        reply = 'In what color would you like to have it?';
+                    } else {
+                        reply = `Would you like to order it in your favourite color ${color}?`;
+                    }
+                    sendTextMessage(sender, reply);
+
+                }, sender
+            )
+            break;
+        case "iphone_colors":
+            colors.readAllColors(function (allColors) {
+                let allColorsString = allColors.join(', ');
+                let reply = `IPhone xxx is available in ${allColorsString}. What is your favourite color?`;
+                sendTextMessage(sender, reply);
+            });
+            break;
+        case "iphone_colors.fovourite":
+            colors.updateUserColor(parameters.fields['color'].stringValue, sender);
+            let reply = `Oh, I like it, too. I'll remember that.`;
+            sendTextMessage(sender, reply);
+            break;
         case "faq-delivery":
             handleMessages(messages, sender);
 
