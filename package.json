@@ -4,7 +4,9 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start-dev": "nodemon --inspect app.js",
+    "tunnel": "ngrok http 8080"
   },
   "repository": {
     "type": "git",
@@ -23,5 +25,8 @@
     "pg": "7.4.3",
     "request": "^2.88.0",
     "uuid": "^3.3.2"
+  },
+  "devDependencies": {
+    "ngrok": "^3.4.0"
   }
 }
